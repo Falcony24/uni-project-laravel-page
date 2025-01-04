@@ -37,6 +37,7 @@ Route::get('/product/{product}', [ShopController::class, 'showProduct'])->name('
 Route::post('/cart/add/{product}', [CartController::class, 'addToCart'])->name('cart.add');
 Route::get('/cart', [CartController::class, 'showCart'])->name('cart');
 Route::post('/wishlist/add/{product}', [WishListController::class, 'addToWishList'])->name('wishList.add');
+Route::get('/sumarize', [])->name('cart.summarize');
 Route::get('/{category}/{subCategory}', [ShopController::class, 'showProductCatalog'])->name('shop.catalog');
 Route::get('/{category}', [ShopController::class, 'showCategoryCatalog'])->name('shop.categories');
 Route::get('/', [ViewController::class, 'defaultPage'])->name('defaultPage');

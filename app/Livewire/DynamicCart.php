@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Livewire\Attributes\On;
 
 class DynamicCart extends Component{
     public bool $isGuest = false;
@@ -12,7 +13,15 @@ class DynamicCart extends Component{
     public bool $isAdmin = false;
     public $cartTotal = 0;
 
+    #[On('refresh')]
+    public function refresh(){
+        $this->loadData();
+    }
     public function mount(){
+        $this->loadData();
+    }
+
+    public function loadData(){
         $this->isAdmin = Auth::check() && Auth::user()->isAdmin();
         $this->isUser = Auth::check();
         $this->isGuest = !($this->isAdmin && $this->isUser);

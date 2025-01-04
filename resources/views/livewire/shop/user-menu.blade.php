@@ -11,7 +11,7 @@
                     <a href="{{ route('admin.index') }}">Panel administracyjny</a>
                 </div>
                 <div class="hover:underline">
-                    <button wire:click="logout">Wyloguj</button>
+                    <a href="{{route('logout')}}">Wyloguj</a>
                 </div>
             </div>
         </div>
@@ -27,10 +27,7 @@
                     <a href="{{ route('profile.index') }}">Profil</a>
                 </div>
                 <div class="hover:underline">
-                    <a href="{{ route('profile.wishList') }}">Lista życzeń</a>
-                </div>
-                <div class="hover:underline">
-                    <button wire:click="logout">Wyloguj</button>
+                    <a href="{{route('logout')}}">Wyloguj</a>
                 </div>
             </div>
         </div>

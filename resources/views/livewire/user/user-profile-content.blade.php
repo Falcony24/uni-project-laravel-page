@@ -6,14 +6,51 @@
     </div>
 
     <div class="container">
-        @if($cotent)
-            <h1 class="font-bold">Profil użytkownika</h1>
+        @if($content)
+            <h1 class="font-bold">{{$content['title']}}</h1>
             <div class="card">
-                <div class="card-body">
-                        <h5 class="card-title">Imię i nazwisko: {{ $user->name }} {{ $user->surname }}</h5>
-                        <p class="card-text">Email: {{ $user->email }}</p>
-                        <p class="card-text">Data utworzenia konta: {{ $user->created_at->format('d-m-Y') }}</p>
-                </div>
+{{--                <pre>{{ print_r($content['items'], true) }}</pre>--}}
+
+            @switch($opt)
+                    @case('profile')
+                            <p>Imię: {{ $user['name'] }}</p>
+                            <p>Nazwisko: {{ $user['surname'] }}</p>
+                            <p>Email: {{ $user['email'] }}</p>
+                    @break
+
+                    @case('addresses')
+                    @break
+
+                    @case('wishList')
+                        <div class="space-y-4">
+                            @foreach($content['items'] as $item)
+                                <div  class="flex justify-between items-center p-4 border-b border-gray-300">
+                                    <div class="text-gray-800">
+                                        <a href="{{ route('shop.product', $item['name']) }}" class="text-blue-500 hover:underline">
+                                            {{ $item['name'] }}
+                                        </a>
+                                    </div>
+                                    <div class="flex gap-4">
+                                        <form method="POST" action="{{ route('cart.add', $item['id']) }}">
+                                            @csrf
+                                            <button
+                                                wire:click="removeFromWishList('{{ $item['id'] }}')"
+                                                type="submit" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
+                                                Dodaj do koszyka
+                                            </button>
+                                        </form>
+                                        <button
+                                            wire:click="removeFromWishList('{{ $item['id'] }}')"
+                                            class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+                                            Usuń z listy życzeń
+                                        </button>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+
+                    @break
+                @endswitch
             </div>
         @endif
     </div>

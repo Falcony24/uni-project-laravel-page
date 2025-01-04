@@ -9,10 +9,8 @@ use Livewire\Component;
 class DynamicAdminLists extends Component{
     protected $listeners = ['loadList' => 'loadTableData'];
     public $tableName;
-
     public $data = [];
     public $columns = [];
-
     public $id;
 
     public function loadList($tableName): void {

@@ -6,7 +6,9 @@
                 <span class="bg-gray-800 text-white px-2 py-1 rounded">{{ $cartTotal }} zł</span>
             </a>
         @else
-            <span class="text-gray-500">Koszyk</span>
+            <a href="{{ route('cart') }}" class="hover:underline flex items-center">
+                <span class="text-gray-500">Koszyk</span>
+            </a>
         @endif
     @endif
 </div>

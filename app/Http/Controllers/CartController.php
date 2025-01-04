@@ -48,8 +48,6 @@ class CartController extends Controller{
         return redirect()->back()->with('success', 'Produkt został dodany do koszyka');
     }
 
-    public function removeFromCart(Request $request, $productId) {
-    }
     public static function syncGuestCartToUser(): void {
         $cart = json_decode(request()->cookie('guest_cart', '[]'), true);
 
@@ -72,9 +70,6 @@ class CartController extends Controller{
         Cookie::queue(Cookie::forget('guest_cart'));
     }
     public function showCart(){
-        $cartItems = [];
-        $cartTotal = 0;
-
         if (Auth::check()) {
             $user = Auth::user();
             $cart = $user->cart;
