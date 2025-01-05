@@ -6,6 +6,7 @@
         <button wire:click="loadList('sub_categories')" class="btn btn-info px-4 py-2 bg-blue-800 hover:bg-blue-600 rounded transition duration-300">Tabela podkategorii</button>
         <button wire:click="loadList('brands')" class="btn btn-info px-4 py-2 bg-blue-800 hover:bg-blue-600 rounded transition duration-300">Tabela marek</button>
         <button wire:click="loadList('orders')" class="btn btn-info px-4 py-2 bg-blue-800 hover:bg-blue-600 rounded transition duration-300">Tabela zamówień</button>
+        <button wire:click="loadList('product_images')" class="btn btn-info px-4 py-2 bg-blue-800 hover:bg-blue-600 rounded transition duration-300">Tabela zdjęć produktów</button>
     </div>
 
     <div class="px-4 py-2 bg-slate-950 transition duration-300 rounded">

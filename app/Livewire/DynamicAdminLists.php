@@ -24,15 +24,6 @@ class DynamicAdminLists extends Component{
             $this->data = [];
         }
     }
-    public function editRow($id): void {
-
-    }
-    public function deleteRow($id) {
-        session()->flash('formData', ['tableName' => $this->tableName, 'id' => $id]);
-
-        return redirect()->route('admin.deleteRow');
-    }
-
     public function render()
     {
         return view('livewire.admin.dynamic-admin-lists');

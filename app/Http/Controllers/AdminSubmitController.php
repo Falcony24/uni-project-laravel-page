@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Livewire\WithFileUploads;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -84,7 +85,17 @@ class AdminSubmitController extends Controller {
         $record = $model::findOrFail($id);
 
         try {
+            if ($tableName === 'product_images') {
+                $filePath = $record->file_path;
+                $fileName = $record->file_name;
+
+                if (Storage::disk('public')->exists($filePath . '/' . $fileName)) {
+                    Storage::disk('public')->delete($filePath . '/' . $fileName);
+                }
+            }
+
             $record->delete();
+
         } catch (QueryException $e) {
             if (str_contains($e->getMessage(), 'Cannot delete or update a parent row: a foreign key constraint fails')) {
                 return redirect('/admin')->with(['error' => 'Nie można usunąć rekordu, ponieważ jest powiązany z innymi danymi.']);
