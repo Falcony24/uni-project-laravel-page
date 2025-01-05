@@ -36,31 +36,6 @@ class DynamiAdminForms extends Component{
         }
     }
 
-    protected function submitImgs() {
-        $this->validate([
-            'images.*' => 'required|file|mimes:jpg,jpeg,png|max:1024'
-        ]);
-
-        $id = $this->fields[$this->tableName.'_id'];
-        $paths = [];
-
-        foreach ($this->images as $image) {
-            $paths[] = $image->store('uploads/'.$this->tableName.'/'.$id, 'public');
-        }
-        $this->fields['images'] = $paths;
-        $this->fields[$this->tableName.'_id'] = $id;
-    }
-
-    public function submit(){
-        if (str_contains($this->tableName, '_images')){
-            $this->submitImgs();
-        }
-
-        session()->flash('formData', ['tableName' => $this->tableName, 'fields' => $this->fields]);
-
-        return redirect()->route('admin.submitData');
-    }
-
     public function render(){
         return view('livewire.admin.dynamiAdminForms');
     }

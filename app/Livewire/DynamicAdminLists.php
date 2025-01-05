@@ -30,7 +30,7 @@ class DynamicAdminLists extends Component{
     public function deleteRow($id) {
         session()->flash('formData', ['tableName' => $this->tableName, 'id' => $id]);
 
-        return redirect()->route('admin.deleteData');
+        return redirect()->route('admin.deleteRow');
     }
 
     public function render()

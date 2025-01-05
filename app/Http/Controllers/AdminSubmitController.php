@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ProductImage;
-use Exception;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\QueryException;
+use Illuminate\Http\Request;
 use Livewire\WithFileUploads;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Symfony\Component\CssSelector\Exception\InternalErrorException;
 
 class AdminSubmitController extends Controller {
     use WithFileUploads;
@@ -20,106 +23,77 @@ class AdminSubmitController extends Controller {
         'sub_categories_images' => \App\Models\SubCategoryImage::class
     ];
 
-    protected function imgsToDB(array $imgsPaths, $id, $tableName) {
-        $foreignKeyMap = [
-            'product_images' => 'product_id',
-            'sub_categories_images' => 'sub_categories_id',
-        ];
-
-        foreach ($imgsPaths as $imgPath) {
-            $modelClass = $this->modelMap[$tableName];
-            $model = new $modelClass;
-
-            $filename = basename($imgPath);
-            $filepath = dirname($imgPath);
-
-            $foreignKey = $foreignKeyMap[$tableName] ?? null;
-
-            if ($foreignKey) {
-                $model->file_name = $filename;
-                $model->file_path = $filepath;
-                $model->$foreignKey = $id;
-
-                $model->save();
-            } else {
-                throw new Exception("Nie znaleziono klucza obcego dla tabeli: $tableName");
-            }
-        }
-    }
-
-    public function toDB() {
-        $formData = session()->get('formData');
-
-        if ($formData) {
-            $tableName = $formData['tableName'];
-            $fields = $formData['fields'];
-        } else {
-            return response(['error' => 'Nie przekazano danych']);
-        }
+    public function toDB(Request $request) {
+        $tableName = $request->input('tableName');
+        $fields = $request->except(['_token', 'tableName', 'images']);
+        $images = $request->file('images', []);
 
         if (!array_key_exists($tableName, $this->modelMap)) {
-            return response(['error' => 'Nie znaleziono modelu '.$tableName]);
-        }
-
-        if (str_contains($tableName, '_images')) {
-            $this->imgsToDB($fields['images'], $fields[$tableName.'_id'], $tableName);
-
-            return redirect('/admin')->with(['success' => 'Dane zapisane']);
+            return redirect()->back()->withErrors(['error' => 'Nie znaleziono modelu ' . $tableName]);
         }
 
         $modelClass = $this->modelMap[$tableName];
         $model = new $modelClass;
 
-//        $t = '';
-//        foreach($fields['images'] as $field) {
-//            $t .= $field." ";
-//        }
-//        return response(['error' => $t]);
-
-
-        foreach ($fields as $key => $value) {
-            if (in_array($key, $model->getFillable())) {
-                $model->$key = $value;
+        if (str_contains($tableName, '_images')) {
+            $this->handleImages($images, $fields[$tableName . '_id'], $tableName);
+        } else {
+            foreach ($fields as $key => $value) {
+                if (in_array($key, $model->getFillable())) {
+                    $model->$key = $value;
+                }
             }
-        }
 
-        $model->save();
+            $model->save();
+        }
 
         return redirect('/admin')->with(['success' => 'Dane zapisane']);
     }
 
-    public function hasAnyRelations($model) {
-        foreach ($model->getRelations() as $relation => $value) {
-            if ($value instanceof \Illuminate\Database\Eloquent\Relations\HasMany ||
-                $value instanceof \Illuminate\Database\Eloquent\Relations\BelongsTo) {
-                if ($value->exists()) {
-                    return true;
-                }
-            }
+    protected function handleImages(array $images, $id, $tableName) {
+        foreach ($images as $image) {
+            $path = $image->store('uploads/' . $tableName . '/' . $id, 'public');
+            $modelClass = $this->modelMap[$tableName];
+            $model = new $modelClass;
+
+            $model->file_name = basename($path);
+            $model->file_path = dirname($path);
+            $model->product_id = $id;
+
+            $model->save();
         }
-        return false;
     }
 
     /**
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function deleteRow() {
-        $formData = session()->get('formData');
-        $tableName = $formData['tableName'];
-        $id = $formData['id'];
+
+    public function deleteRow(Request $request)
+    {
+        $tableName = $request->input('tableName');
+        $id = $request->input('id');
+
+        if (!array_key_exists($tableName, $this->modelMap)) {
+            return redirect('/admin')->with(['error' => 'Nie znaleziono modelu dla tabeli: ' . $tableName]);
+        }
 
         $modelClass = $this->modelMap[$tableName];
         $model = new $modelClass;
 
         $record = $model::findOrFail($id);
 
-        if(!$this->hasAnyRelations($model)){
-            return redirect('/admin')->with(['error' => 'Istnieją powiązania, nie można usunąć bezpośrednio']);
-        }
+        try {
+            $record->delete();
+        } catch (QueryException $e) {
+            if (str_contains($e->getMessage(), 'Cannot delete or update a parent row: a foreign key constraint fails')) {
+                return redirect('/admin')->with(['error' => 'Nie można usunąć rekordu, ponieważ jest powiązany z innymi danymi.']);
+            }
 
-        $record->delete();
+            throw $e;
+        }
 
         return redirect('/admin')->with(['success' => 'Dane Usunięte']);
     }
+
 }

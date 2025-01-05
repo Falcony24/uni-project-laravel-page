@@ -28,8 +28,19 @@
                                 <td class="border border-gray-500 px-2 py-1">{{ $row->$column }}</td>
                             @endforeach
                             <td>
-                                <button wire:click="editRow({{ $row->id }})" class="bg-green-500 px-2 py-1 rounded">Edytuj</button>
-                                <button wire:click="deleteRow({{ $row->id }})" class="bg-red-500 px-2 py-1 rounded">Usuń</button>
+{{--                                <form action="{{ route('editRow', ['id' => $row->id]) }}" method="POST" style="display: inline;">--}}
+{{--                                    @csrf--}}
+{{--                                    @method('PUT')--}}
+{{--                                    <button type="submit" class="bg-green-500 px-2 py-1 rounded">Edytuj</button>--}}
+{{--                                </form>--}}
+                                <form action="{{ route('admin.deleteRow')}}" method="POST" style="display: inline;">
+                                    @csrf
+                                    <input type="hidden" name="tableName" value="{{ $tableName }}">
+                                    <input type="hidden" name="id" value="{{ $row->id }}">
+                                    @method('DELETE')
+                                    <button type="submit" class="bg-red-500 px-2 py-1 rounded">Usuń</button>
+                                </form>
+
                             </td>
                         </tr>
                     @endforeach

@@ -11,25 +11,39 @@
     <div class="px-4 py-2 bg-slate-950 transition duration-300 rounded">
         @if ($tableName)
             <h3>Formularz dla tabeli: {{ $tableName }}</h3>
-            <form wire:submit.prevent="submit">
+            <form action="{{ route('admin.submitData') }}" method="POST" enctype="multipart/form-data">
                 @csrf
+                <input type="hidden" name="tableName" value="{{ $tableName }}">
                 @foreach ($formFields as $field)
                     @continue($field == 'id')
                     @if($field == 'images')
                         <div class="flex items-center mb-3 bg-gray-800 rounded p-2">
                             <label for="images" class="w-1/3 text-white form-label">Images</label>
-                            <input type="file" multiple id="images" name="images" class="w-2/3 form-control p-2 rounded bg-gray-700 text-white" wire:model.defer="images">
+                            <input
+                                type="file"
+                                multiple
+                                id="images"
+                                name="images[]"
+                                class="w-2/3 form-control p-2 rounded bg-gray-700 text-white">
                         </div>
                         <div class="flex items-center mb-3 bg-gray-800 rounded p-2">
-                            <label for="{{$tableName}}_id" class="w-1/3 text-white form-label">{{$tableName}}_id</label>
-                            <input type="text" id="{{$tableName}}_id" name="{{$tableName}}_id" class="w-2/3 form-control p-2 rounded bg-gray-700 text-white" wire:model.defer="fields.{{$tableName}}_id">
+                            <label for="{{ $tableName }}_id" class="w-1/3 text-white form-label">product_id</label>
+                            <input
+                                type="text"
+                                id="{{ $tableName }}_id"
+                                name="{{ $tableName }}_id"
+                                class="w-2/3 form-control p-2 rounded bg-gray-700 text-white">
                         </div>
                         @break
                     @endif
 
                     <div class="flex items-center mb-3 bg-gray-800 rounded p-2">
                         <label for="{{ $field }}" class="w-1/3 text-white form-label">{{ ucfirst($field) }}</label>
-                        <input type="text" id="{{ $field }}" name="{{ $field }}" class="w-2/3 form-control p-2 rounded bg-gray-700 text-white" wire:model.defer="fields.{{ $field }}">
+                        <input
+                            type="text"
+                            id="{{ $field }}"
+                            name="{{ $field }}"
+                            class="w-2/3 form-control p-2 rounded bg-gray-700 text-white">
                     </div>
                 @endforeach
                 <button type="submit" class="btn btn-primary px-4 py-2 bg-blue-800 rounded">Zapisz</button>
