@@ -26,6 +26,9 @@ class User extends Authenticatable {
         return $this->role === 0 && auth()->check();
     }
 
+    public function addresses(){
+        return $this->hasMany(Addresses::class);
+    }
     public function cart(){
         return $this->hasMany(Cart::class, 'user_id', 'id');
     }

@@ -69,53 +69,9 @@ class CartController extends Controller{
 
         Cookie::queue(Cookie::forget('guest_cart'));
     }
-    public function showCart(){
-        if (Auth::check()) {
-            $user = Auth::user();
-            $cart = $user->cart;
-
-            $cartItems = $cart->map(function ($cartItem) {
-                $quantity = $cartItem->quantity;
-                $cartItem = $cartItem->products;
-                return [
-                    'product_id' => $cartItem->id,
-                    'name' => $cartItem->name,
-                    'price' => $cartItem->price,
-                    'quantity' => $quantity,
-                    'total' => $quantity * $cartItem->price,
-                ];
-            });
-
-
-            $cartTotal = $cartItems->sum('total');
-        }
-        else {
-            $guestCart = json_decode(request()->cookie('guest_cart', '[]'), true);
-
-            $productIds = collect($guestCart)->pluck('product_id');
-            $products = Product::whereIn('id', $productIds)->get();
-
-            $cartItems = collect($guestCart)->map(function ($item) use ($products) {
-                $product = $products->firstWhere('id', $item['product_id']);
-                if ($product) {
-                    return [
-                        'product_id' => $product->id,
-                        'name' => $product->name,
-                        'price' => $product->price,
-                        'quantity' => $item['quantity'],
-                        'total' => $item['quantity'] * $product->price,
-                    ];
-                }
-                return null;
-            })->filter();
-
-            $cartTotal = $cartItems->sum('total');
-        }
-
+    public function index(){
         return view('shop.cart', [
-            'title' => 'Koszyk',
-            'cartItems' => $cartItems,
-            'cartTotal' => $cartTotal,
+            'title' => 'Koszyk'
             ]);
     }
 }

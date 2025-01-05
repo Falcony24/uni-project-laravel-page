@@ -39,7 +39,7 @@ class UserProfileContent extends Component{
         $this->content['items'] = $this->wishListItems;
     }
     public function addresses(){
-
+        $this->content['title'] = 'Adresy';
     }
     public function loadData($opt) {
         $this->opt = $opt;
@@ -49,6 +49,7 @@ class UserProfileContent extends Component{
                 $this->wishList();
                 break;
             case 'addresses':
+                //user-addresses livewire
                 $this->addresses();
                 break;
             case 'profile':

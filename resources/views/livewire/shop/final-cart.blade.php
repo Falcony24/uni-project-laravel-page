@@ -15,21 +15,27 @@
                     <tbody>
                     @foreach ($cartItems as $item)
                         <tr class="border-b-2 border-slate-700 hover:bg-slate-800">
-                            <td class="py-4 px-6 text-white"><a href="{{ route('shop.product', $item['name']) }}">{{ $item['name'] }}</a></td>
+                            <td class="py-4 px-6 text-white">
+                                <a href="{{ route('shop.product', $item['name']) }}">{{ $item['name'] }}</a>
+                            </td>
                             <td class="py-4 px-6 text-white">{{ number_format($item['price'], 2) }} zł</td>
-                        <td class="py-4 px-6 text-black">
-                            <input
-                                type="number"
-                                min="1"
-                                value="{{ $item['quantity'] }}"
-                                wire:model="cartItems.{{ $loop->index }}.quantity"
-                                wire:change="updateQuantity({{ $item['product_id'] }}, $event.target.value)"
-                                class="w-16 text-center border rounded px-2 py-1"
-                            >
-                        </td>
-                        <td class="py-4 px-6 text-white">{{ number_format($item['total'], 2) }} zł</td>
-                    </tr>
-                @endforeach
+                            <td class="py-4 px-6 text-black">
+                                @if ($canEdit)
+                                    <input
+                                        type="number"
+                                        min="1"
+                                        value="{{ $item['quantity'] }}"
+                                        wire:model.defer="cartItems.{{ $loop->index }}.quantity"
+                                        wire:change="updateQuantity({{ $item['product_id'] }}, $event.target.value)"
+                                        class="w-16 text-center border rounded px-2 py-1"
+                                    >
+                                @else
+                                    <span class="text-white">{{ $item['quantity'] }}</span>
+                                @endif
+                            </td>
+                            <td class="py-4 px-6 text-white">{{ number_format($item['total'], 2) }} zł</td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -37,5 +43,21 @@
         <div class="mt-6 text-right">
             <h3 class="text-xl font-semibold text-white">Łączna kwota: {{ number_format($cartTotal, 2) }} zł</h3>
         </div>
+
+        @if ($canEdit)
+            <div class="mt-6 text-right">
+                <button wire:click="lockCart" class="btn btn-primary px-4 py-2 bg-blue-800 text-white rounded">
+                    Przejdź dalej
+                </button>
+            </div>
+        @else
+            <livewire:user-addresses/>
+            <form class="mt-6 text-right" action="" method="POST">
+                @csrf
+                <button type="submit" class="btn btn-success px-4 py-2 bg-green-800 hover:bg-green-700 text-white rounded">
+                    Finalizuj zakupy
+                </button>
+            </form>
+        @endif
     @endif
 </div>

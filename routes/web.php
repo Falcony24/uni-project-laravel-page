@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AdminSubmitController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\DeliveryController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WishListController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthManagerController;
@@ -12,8 +14,9 @@ use App\Http\Controllers\ShopController;
 
 // profile
 Route::middleware(CheckUser::class)->prefix('profile')->name('profile.')->group(function () {
-    Route::get('/', [ViewController::class, 'profileView'])->name('index');
-    Route::get('/wishList', [ViewController::class, 'profileView'])->name('wishList');
+    Route::get('/{any}', [ProfileController::class, 'index'])->name('index');
+    Route::get('/', [ProfileController::class, 'index'])->name('index');
+    Route::post('/addresses', [ProfileController::class, 'addAddress'])->name('address');
 });
 
 // admin
@@ -35,8 +38,9 @@ Route::get('/register', [ViewController::class, 'viewLogin'])
 // shop
 Route::get('/product/{product}', [ShopController::class, 'showProduct'])->name('shop.product');
 Route::post('/cart/add/{product}', [CartController::class, 'addToCart'])->name('cart.add');
-Route::get('/cart', [CartController::class, 'showCart'])->name('cart');
-Route::get('/sumarize', [])->name('cart.summarize');
+Route::get('/cart', [CartController::class, 'index'])->name('cart');
+Route::get('/cart/delivery', [DeliveryController::class, 'index'])->name('cart.delivery');
+Route::get('/summarize', [])->name('cart.summarize');
 Route::post('/wishlist/add/{product}', [WishListController::class, 'addToWishList'])->name('wishList.add');
 Route::get('/{category}/{subCategory}', [ShopController::class, 'showProductCatalog'])->name('shop.catalog');
 Route::get('/{category}', [ShopController::class, 'showCategoryCatalog'])->name('shop.categories');

@@ -13,7 +13,7 @@
                         @foreach($data['subcategories'] as $subcategory)
                             <li>
                                 <a href="{{ route('shop.catalog', ['category' => $data['category']->name, 'subCategory' => $subcategory->name]) }}"
-                                   class="block p-2 rounded hover:bg-gray-100 text-white">
+                                   class="block p-2 rounded hover:bg-blue-800 text-white">
                                     {{ $subcategory->name }}
                                 </a>
                             </li>

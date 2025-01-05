@@ -14,13 +14,4 @@ class ViewController extends Controller {
     public function adminView() {
         return view('admin', ['title' => 'Administracja']);
     }
-    public function cartView() {
-        return view('profile.cart', ['title' => 'Koszyk']);
-    }
-    public function profileView() {
-
-        return view('profile.profileMain', [
-            'title' => 'Profil',
-        ]);
-    }
 }

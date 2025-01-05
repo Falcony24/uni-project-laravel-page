@@ -19,7 +19,7 @@ class AdminSubmitController extends Controller {
         'products' => \App\Models\Product::class,
         'categories' => \App\Models\Category::class,
         'sub_categories' => \App\Models\SubCategory::class,
-        'brands' => \App\Models\Brand::class,
+        'brands' => \App\Models\Addresses::class,
         'product_images' => \App\Models\ProductImage::class,
         'sub_categories_images' => \App\Models\SubCategoryImage::class
     ];

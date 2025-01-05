@@ -9,8 +9,10 @@ use Livewire\Component;
 class FinalCart extends Component{
     public $cartItems = [];
     public $cartTotal = 0;
-
+    public $canEdit = true;
+    public $user;
     public function mount(){
+        $this->user = Auth::user();
         $this->loadCart();
     }
 
@@ -19,8 +21,7 @@ class FinalCart extends Component{
         $this->cartTotal = 0;
 
         if (Auth::check()) {
-            $user = Auth::user();
-            $cart = $user->cart;
+            $cart = $this->user->cart;
 
             $this->cartItems = $cart->map(function ($cartItem) {
                 $quantity = $cartItem->quantity;
@@ -63,8 +64,7 @@ class FinalCart extends Component{
         $quantity = max(0, $quantity);
 
         if (Auth::check()) {
-            $user = Auth::user();
-            $cartItem = $user->cart()->where('product_id', $productId)->first();
+            $cartItem = $this->user->cart()->where('product_id', $productId)->first();
 
             if ($cartItem) {
                 if ($quantity == 0) {
@@ -72,7 +72,7 @@ class FinalCart extends Component{
                 } else {
                     $cartItem->update([
                         'quantity' => $quantity,
-                        'total' => $cartItem->price * $quantity, // Aktualizuj całkowitą wartość
+                        'total' => $cartItem->price * $quantity,
                     ]);
                 }
             }
@@ -87,7 +87,7 @@ class FinalCart extends Component{
                         $item = null;
                     } else {
                         $item['quantity'] = $quantity;
-                        $item['total'] = $item['quantity'] * $item['price']; // Aktualizuj całkowitą wartość
+                        $item['total'] = $item['quantity'] * $item['price'];
                     }
                     break;
                 }
@@ -101,6 +101,10 @@ class FinalCart extends Component{
         }
 
         $this->dispatch('refresh');
+    }
+
+    public function lockCart(){
+        $this->canEdit = false;
     }
 
     public function render(){
