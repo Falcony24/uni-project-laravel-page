@@ -8,13 +8,6 @@ use Livewire\Component;
 class UserAddresses extends Component{
     public $addresses = [];
 
-    public $name;
-    public $surname;
-    public $city;
-    public $street;
-    public $number;
-
-
     public function mount(){
         $this->addresses = Addresses::where('user_id', auth()->id())->get();
     }

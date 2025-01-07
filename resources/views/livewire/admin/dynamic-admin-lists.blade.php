@@ -29,11 +29,12 @@
                                 <td class="border border-gray-500 px-2 py-1">{{ $row->$column }}</td>
                             @endforeach
                             <td>
-{{--                                <form action="{{ route('editRow', ['id' => $row->id]) }}" method="POST" style="display: inline;">--}}
-{{--                                    @csrf--}}
-{{--                                    @method('PUT')--}}
-{{--                                    <button type="submit" class="bg-green-500 px-2 py-1 rounded">Edytuj</button>--}}
-{{--                                </form>--}}
+                                <form action="{{ route('admin.editRow') }}" method="POST" style="display: inline;">
+                                    @csrf
+                                    <input type="hidden" name="tableName" value="{{ $tableName }}">
+                                    <input type="hidden" name="id" value="{{ $row->id }}">
+                                    <button type="submit" class="bg-green-500 px-2 py-1 rounded">Edytuj</button>
+                                </form>
                                 <form action="{{ route('admin.deleteRow')}}" method="POST" style="display: inline;">
                                     @csrf
                                     <input type="hidden" name="tableName" value="{{ $tableName }}">

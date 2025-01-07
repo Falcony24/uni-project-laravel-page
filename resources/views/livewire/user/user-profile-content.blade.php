@@ -20,7 +20,7 @@
 
                     @case('addresses')
                         <livewire:user-addresses/>
-                        <div id="addressForm" class="mt-4 p-4 w-1/2 hidden border border-8 border-slate-950 rounded bg-gray-900">
+                        <div id="addressForm" class="mt-4 p-4 w-96 hidden border border-8 border-slate-950 rounded bg-gray-900">
                             <h3 class="text-lg text-white font-bold mb-4">Dodaj nowy adres</h3>
                             <form action="{{ route('profile.address') }}" method="POST" >
                                 @csrf
@@ -30,7 +30,7 @@
                                         type="text"
                                         id="name"
                                         name="name"
-                                        class="w-full px-3 py-2 border rounded"
+                                        class="w-full px-3 py-2 border rounded text-black"
                                         placeholder="Wpisz swoje imię"
                                     >
                                     @error('name') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
@@ -42,7 +42,7 @@
                                         type="text"
                                         id="surname"
                                         name="surname"
-                                        class="w-full px-3 py-2 border rounded"
+                                        class="w-full px-3 py-2 border rounded text-black"
                                         placeholder="Wpisz swoje nazwisko"
                                     >
                                     @error('surname') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
@@ -54,7 +54,7 @@
                                         type="text"
                                         id="city"
                                         name="city"
-                                        class="w-full px-3 py-2 border rounded"
+                                        class="w-full px-3 py-2 border rounded text-black"
                                         placeholder="Wpisz miasto"
                                     >
                                     @error('city') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
@@ -66,7 +66,7 @@
                                         type="text"
                                         id="postal_code"
                                         name="postal_code"
-                                        class="w-full px-3 py-2 border rounded"
+                                        class="w-full px-3 py-2 border rounded text-black"
                                         placeholder="Wpisz kod pocztowy"
                                     >
                                     @error('postal_code') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
@@ -78,7 +78,7 @@
                                         type="text"
                                         id="street"
                                         name="street"
-                                        class="w-full px-3 py-2 border rounded"
+                                        class="w-full px-3 py-2 border rounded text-black"
                                         placeholder="Wpisz ulicę"
                                     >
                                     @error('street') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
@@ -90,7 +90,7 @@
                                         type="text"
                                         id="number"
                                         name="number"
-                                        class="w-full px-3 py-2 border rounded"
+                                        class="w-full px-3 py-2 border rounded text-black"
                                         placeholder="Wpisz numer domu/mieszkania"
                                     >
                                     @error('number') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
@@ -102,23 +102,23 @@
                                         type="text"
                                         id="phone_number"
                                         name="phone_number"
-                                        class="w-full px-3 py-2 border rounded"
+                                        class="w-full px-3 py-2 border rounded text-black"
                                         placeholder="Wpisz numer telefonu"
                                     >
                                     @error('phone_number') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                                 </div>
 
-                                <div class="flex justify-end space-x-4">
+                                <div class="flex flex-col sm:flex-row sm:justify-end sm:space-x-4 space-y-4 sm:space-y-0 mt-4">
                                     <button
                                         type="button"
-                                        class="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400 transition"
+                                        class="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400 transition w-full sm:w-auto text-center"
                                         onclick="window.history.back()"
                                     >
                                         Anuluj
                                     </button>
                                     <button
                                         type="submit"
-                                        class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600 transition"
+                                        class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600 transition w-full sm:w-auto text-center"
                                     >
                                         Zapisz
                                     </button>
@@ -163,10 +163,8 @@
 
 <script>
     function toggleForm() {
-        // Pobieramy formularz
         var form = document.getElementById('addressForm');
 
-        // Zmieniamy klasę, aby pokazać lub ukryć formularz
         form.classList.toggle('hidden');
     }
 </script>

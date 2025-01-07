@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Addresses;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -11,6 +12,7 @@ class FinalCart extends Component{
     public $cartTotal = 0;
     public $canEdit = true;
     public $user;
+    public $addresses;
     public function mount(){
         $this->user = Auth::user();
         $this->loadCart();
@@ -103,8 +105,12 @@ class FinalCart extends Component{
         $this->dispatch('refresh');
     }
 
+    public function fetchAddresses() {
+        $this->addresses = Addresses::where('user_id', auth()->id())->get();
+    }
     public function lockCart(){
         $this->canEdit = false;
+        $this->fetchAddresses();
     }
 
     public function render(){

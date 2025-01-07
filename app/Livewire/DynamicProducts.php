@@ -12,19 +12,33 @@ class DynamicProducts extends Component
     public $products = [];
     public $perPage = 10;
 
+    public $priceMin = null;
+    public $priceMax = null;
+
     public function loadMore(){
         $this->perPage += 10;
         $this->fetchProducts();
     }
-
+    public function a(){
+        dd($this->subCategoryName);
+}
     public function fetchProducts(){
         $subCategoryId = SubCategory::where('name', $this->subCategoryName)->value('id');
 
         if ($subCategoryId) {
-            $this->products = Product::where('sub_category_id', $subCategoryId)
-                ->take($this->perPage)
-                ->get();
-        } else {
+            $query = Product::where('sub_category_id', $subCategoryId);
+
+            if ($this->priceMin !== null) {
+                $query->where('price', '>=', $this->priceMin);
+            }
+
+            if ($this->priceMax !== null) {
+                $query->where('price', '<=', $this->priceMax);
+            }
+
+            $this->products = $query->take($this->perPage)->get();
+        }
+        else {
             $this->products = collect();
         }
     }

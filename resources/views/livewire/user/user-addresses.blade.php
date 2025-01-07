@@ -11,13 +11,14 @@
                 </div>
             @endforeach
 
-            @if(count($addresses) < 4)
-                <div class="p-4 bg-slate-800 rounded-lg shadow-md text-white flex justify-center items-center">
-                    <button onclick="toggleForm()" class="px-4 py-2 bg-green-800 text-white rounded hover:bg-green-700">Dodaj nowy adres</button>
-                </div>
-            @endif
         </div>
     @else
         <p class="text-gray-500 mb-4">Nie masz jeszcze zapisanych adresów.</p>
+    @endif
+
+    @if(count($addresses) < 4)
+        <div class="p-4 bg-slate-800 rounded-lg shadow-md text-white flex justify-center items-center">
+            <button onclick="toggleForm()" class="px-4 py-2 bg-green-800 text-white rounded hover:bg-green-700">Dodaj nowy adres</button>
+        </div>
     @endif
 </div>

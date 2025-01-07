@@ -24,13 +24,16 @@ Route::middleware(CheckAdminMiddleware::class)->prefix('admin')->name('admin.')-
     Route::get('/', [ViewController::class, 'adminView'])->name('index');
     Route::post('/submit', [AdminSubmitController::class, 'toDB'])->name('submitData');
     Route::delete('/remove', [AdminSubmitController::class, 'deleteRow'])->name('deleteRow');
+    Route::post('/edit', [AdminSubmitController::class, 'editRow'])->name('editRow');
+    Route::put('/edit/row', [AdminSubmitController::class, 'editRowSubmit'])->name('editRowSubmit');
 });
 
 // login/register forms
 Route::get('/login', [ViewController::class, 'viewLogin'])
     ->middleware('guest')->name('login.view');
 Route::post('/login', [AuthManagerController::class, 'login'])->name('login.post');
-Route::get('/logout', [AuthManagerController::class, 'logout'])->middleware('auth')->name('logout');
+Route::get('/logout', [AuthManagerController::class, 'logout'])
+    ->middleware('auth')->name('logout');
 Route::post('/register', [AuthManagerController::class, 'register'])->name('register.post');
 Route::get('/register', [ViewController::class, 'viewLogin'])
     ->middleware('guest')->name('register.view');

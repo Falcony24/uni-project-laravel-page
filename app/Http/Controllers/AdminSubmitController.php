@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithFileUploads;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use Symfony\Component\CssSelector\Exception\InternalErrorException;
 
 class AdminSubmitController extends Controller {
     use WithFileUploads;
@@ -21,7 +18,8 @@ class AdminSubmitController extends Controller {
         'sub_categories' => \App\Models\SubCategory::class,
         'brands' => \App\Models\Addresses::class,
         'product_images' => \App\Models\ProductImage::class,
-        'sub_categories_images' => \App\Models\SubCategoryImage::class
+        'sub_categories_images' => \App\Models\SubCategoryImage::class,
+        'users' => \App\Models\User::class,
     ];
 
     public function toDB(Request $request) {
@@ -70,8 +68,7 @@ class AdminSubmitController extends Controller {
      * @throws NotFoundExceptionInterface
      */
 
-    public function deleteRow(Request $request)
-    {
+    public function deleteRow(Request $request){
         $tableName = $request->input('tableName');
         $id = $request->input('id');
 
@@ -107,4 +104,22 @@ class AdminSubmitController extends Controller {
         return redirect('/admin')->with(['success' => 'Dane Usunięte']);
     }
 
+    public function editRow(Request $request) {
+        $tableName = $request->input('tableName');
+        $id = $request->input('id');
+
+        $modelClass = $this->modelMap[$tableName];
+
+        $row = $modelClass::findOrFail($id);
+
+        return view('editProduct', [
+            'title' => 'Edycja produktu',
+            'tableName' => $tableName,
+            'row' => $row,
+        ]);
+    }
+
+    public function editRowSubmit(Request $request) {
+
+    }
 }

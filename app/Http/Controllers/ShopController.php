@@ -12,7 +12,6 @@ class ShopController extends Controller {
             ->firstOrFail();
 
         $subCategories = $category->subCategories;
-
         return view('shop.shopListSubCats', [
             'title' => $category->name,
             'subCategories' => $subCategories,

@@ -12,12 +12,12 @@ function showRegisterForm() {
     $("#loginBtn").removeClass("active");
 }
 
-$(document).ready(function() {
-    $("#loginBtn").click(function() {
+$(document).ready(function () {
+    $("#loginBtn").click(function () {
         showLoginForm();
     });
 
-    $("#registerBtn").click(function() {
+    $("#registerBtn").click(function () {
         showRegisterForm();
     });
 });
