@@ -3,7 +3,6 @@
 @section('content')
     <div class="container mx-auto">
         <h1 class="text-2xl font-bold mb-6">{{ $title }}</h1>
-        <form id="filtersForm" class="p-4 bg-slate-700 rounded mb-6 text-white">
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 <div>
                     <label for="price_min" class="block text-sm font-semibold">Cena od:</label>
@@ -13,7 +12,6 @@
                         name="price_min"
                         class="w-full px-4 py-2 bg-gray-700 text-white rounded"
                         placeholder="Min"
-                        wire:model.defer="priceMin"
                     >
                 </div>
 
@@ -25,7 +23,6 @@
                         name="price_max"
                         class="w-full px-4 py-2 bg-gray-700 text-white rounded"
                         placeholder="Max"
-                        wire:model.defer="priceMax"
                     >
                 </div>
             </div>
@@ -34,12 +31,21 @@
                 type="button"
                 id="applyFilters"
                 class="mt-4 px-4 py-2 bg-green-800 hover:bg-green-700 rounded text-white"
-                wire:click="a"
+                onclick="applyFilters()"
             >
                 Zastosuj filtry
             </button>
-        </form>
+
+
 
         <livewire:dynamic-products :sub-category-name="$title" />
     </div>
 @endsection
+<script>
+    function applyFilters() {
+        const priceMin = ['priceMin', document.getElementById('price_min').value || null];
+        const priceMax = ['priceMax', document.getElementById('price_max').value || null];
+
+        window.Livewire.dispatchTo('dynamic-products', 'filters', [priceMin, priceMax]);
+    }
+</script>

@@ -28,6 +28,10 @@ class CartController extends Controller{
         return redirect()->back()->withCookie($cookie)->with('success', 'Produkt został dodany do koszyka');
     }
     public function addToCart(Request $request, $productId){
+        if ($request->isMethod('get')) {
+            return redirect()->route('defaultPage');
+        }
+
         if(!Auth::check()){
             return $this->addToCartGuest($productId);
         }

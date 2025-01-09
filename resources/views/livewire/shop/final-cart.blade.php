@@ -43,51 +43,52 @@
         <div class="mt-6 text-right">
             <h3 class="text-xl font-semibold text-white">Łączna kwota: {{ number_format($cartTotal, 2) }} zł</h3>
         </div>
+        @if(!Auth::guest())
+            @if ($canEdit)
+                <div class="mt-6 text-right">
+                    <button wire:click="lockCart" class="btn btn-primary px-4 py-2 bg-blue-800 text-white rounded">
+                        Przejdź dalej
+                    </button>
+                </div>
+            @else
+                <div class="bg-slate-800 container mx-auto px-4 py-6">
+                    @if ($addresses->isNotEmpty())
+                        <h2 class="text-xl font-semibold mb-4">Twoje adresy:</h2>
+                        <form action="" method="POST" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            @csrf
+                            @foreach($addresses as $address)
+                                <label for="address_{{ $address->id }}" class="p-4 bg-slate-800 rounded-lg shadow-md text-white cursor-pointer">
+                                    <div>
+                                        <h3 class="text-lg font-semibold">{{ $address->name }} {{ $address->surname }}</h3>
+                                        <p>{{ $address->street }} {{ $address->number }}</p>
+                                        <p>{{ $address->postal_code }} {{ $address->city }}</p>
+                                        <p>Telefon: {{ $address->phone_number }}</p>
+                                    </div>
+                                    <input
+                                        type="radio"
+                                        name="selected_address"
+                                        value="{{ $address->id }}"
+                                        id="address_{{ $address->id }}"
+                                        class="mt-2"
+                                        required
+                                    >
+                                </label>
+                            @endforeach
 
-        @if ($canEdit)
-            <div class="mt-6 text-right">
-                <button wire:click="lockCart" class="btn btn-primary px-4 py-2 bg-blue-800 text-white rounded">
-                    Przejdź dalej
-                </button>
-            </div>
-        @else
-            <div class="bg-slate-800 container mx-auto px-4 py-6">
-                @if ($addresses->isNotEmpty())
-                    <h2 class="text-xl font-semibold mb-4">Twoje adresy:</h2>
-                    <form action="" method="POST" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                        @csrf
-                        @foreach($addresses as $address)
-                            <label for="address_{{ $address->id }}" class="p-4 bg-slate-800 rounded-lg shadow-md text-white cursor-pointer">
-                                <div>
-                                    <h3 class="text-lg font-semibold">{{ $address->name }} {{ $address->surname }}</h3>
-                                    <p>{{ $address->street }} {{ $address->number }}</p>
-                                    <p>{{ $address->postal_code }} {{ $address->city }}</p>
-                                    <p>Telefon: {{ $address->phone_number }}</p>
-                                </div>
-                                <input
-                                    type="radio"
-                                    name="selected_address"
-                                    value="{{ $address->id }}"
-                                    id="address_{{ $address->id }}"
-                                    class="mt-2"
-                                    required
+                            <div class="col-span-full flex justify-center mt-6">
+                                <button
+                                    type="submit"
+                                    class="px-4 py-2 bg-green-800 text-white rounded hover:bg-green-700"
                                 >
-                            </label>
-                        @endforeach
-
-                        <div class="col-span-full flex justify-center mt-6">
-                            <button
-                                type="submit"
-                                class="px-4 py-2 bg-green-800 text-white rounded hover:bg-green-700"
-                            >
-                                Zamów
-                            </button>
-                        </div>
-                    </form>
-                @else
-                    <p class="text-gray-500 mb-4">Nie masz jeszcze zapisanych adresów, wejdź w zakładkę adresy, która znajduje się na twoim profilu</p>
-                @endif
-            </div>
+                                    Zamów
+                                </button>
+                            </div>
+                        </form>
+                    @else
+                        <p class="text-gray-500 mb-4">Nie masz jeszcze zapisanych adresów, wejdź w zakładkę adresy, która znajduje się na twoim profilu</p>
+                    @endif
+                </div>
+            @endif
         @endif
     @endif
 </div>

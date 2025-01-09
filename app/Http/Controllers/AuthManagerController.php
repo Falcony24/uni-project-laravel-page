@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Session;
 
 class AuthManagerController extends Controller {
     public function login(LoginRequest $request) {
@@ -17,12 +16,15 @@ class AuthManagerController extends Controller {
             return redirect()->intended('/profile');
         }
 
-        return redirect(route('login.view'))->with('error', 'Dane logowania są nieprawidłowe');
+//        return redirect(route('login.view'))->with('error', 'Dane logowania są nieprawidłowe');
+        return redirect(route('login.view'));
     }
     public function logout() {
-        Session::flash('success', 'Zostałeś pomyślnie wylogowany.');
-        Auth::logout();
-        return redirect('/');
+        if(Auth::check()){
+            Auth::logout();
+        }
+
+        return redirect()->route('defaultPage');
     }
 
     public function register(RegisterRequest $request) {
@@ -39,11 +41,11 @@ class AuthManagerController extends Controller {
                 return redirect()->intended('/profile')->with('success', 'Rejestracja udana. Zalogowano.');
             }
 
-            return redirect()->back()->with('error', 'Rejestracja nie powiodła się. Spróbuj ponownie.');
+            return redirect()->back()->with('errors', 'Rejestracja nie powiodła się. Spróbuj ponownie.');
         } catch (Exception $e) {
             Log::error('Błąd podczas rejestracji użytkownika: ' . $e->getMessage());
 
-            return redirect()->back()->with('error', 'Wystąpił błąd. Spróbuj ponownie później.');
+            return redirect()->back()->with('errors', 'Wystąpił błąd. Spróbuj ponownie później.');
         }
     }
 }

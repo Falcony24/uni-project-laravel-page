@@ -16,10 +16,11 @@ class AdminSubmitController extends Controller {
         'products' => \App\Models\Product::class,
         'categories' => \App\Models\Category::class,
         'sub_categories' => \App\Models\SubCategory::class,
-        'brands' => \App\Models\Addresses::class,
+        'addresses' => \App\Models\Addresses::class,
         'product_images' => \App\Models\ProductImage::class,
         'sub_categories_images' => \App\Models\SubCategoryImage::class,
         'users' => \App\Models\User::class,
+        'brands' => \App\Models\Brand::class,
     ];
 
     public function toDB(Request $request) {
@@ -120,6 +121,30 @@ class AdminSubmitController extends Controller {
     }
 
     public function editRowSubmit(Request $request) {
+        $tableName = $request->input('tableName');
+        $modelClass = $this->modelMap[$tableName] ?? null;
 
+        if (!$modelClass || !class_exists($modelClass)) {
+            return back()->withErrors(['error' => 'Nieprawidłowa tabela.']);
+        }
+
+        $id = $request->input('id');
+        $modelInstance = $modelClass::find($id);
+
+        if (!$modelInstance) {
+            return back()->withErrors(['error' => 'Nie znaleziono rekordu.']);
+        }
+
+        try {
+            $attributes = $request->except(['_token', '_method', 'tableName', 'id']);
+            $modelInstance->update($attributes);
+            return redirect()
+                ->route('admin.index', ['tableName' => $tableName])->with('success', 'Rekord został zaktualizowany.');
+        }
+        catch (\Exception $e) {
+            return redirect()
+                ->route('admin.index', ['error' => 'Wystąpił błąd podczas aktualizacji rekordu: ' . $e->getMessage()])
+                ->with('success', 'Rekord został zaktualizowany.');
+        }
     }
 }

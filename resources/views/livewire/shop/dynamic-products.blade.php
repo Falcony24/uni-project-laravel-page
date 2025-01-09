@@ -1,5 +1,4 @@
 <div>
-
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         @if (count($products) !== 0)
             @foreach ($products as $product)
@@ -12,11 +11,11 @@
                 </a>
             @endforeach
         @else
-            <p>Brak produktów w tej kategorii</p>
+            <p>Brak produktów</p>
         @endif
     </div>
 
-    @if (count($products) >= $perPage)
+    @if (count($products) >= $count and $count != 0)
         <button wire:click="loadMore"
                 class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
             Pokaż więcej

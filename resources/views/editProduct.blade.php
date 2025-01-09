@@ -8,7 +8,7 @@
             <form action="{{ route('admin.editRowSubmit') }}" method="POST">
                 @csrf
                 @method('PUT')
-
+                <input type="hidden" name="tableName" value="{{ $tableName }}">
                 @foreach($row->getAttributes() as $key => $value)
                     @if($key != 'id')
                         <div class="flex items-center mb-3 bg-gray-800 rounded p-2">
@@ -22,6 +22,8 @@
                                 required
                             >
                         </div>
+                    @else
+                        <input type="hidden" name="id" value="{{ $value }}">
                     @endif
                 @endforeach
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\SubCategory;
 
 class ShopController extends Controller {
     public function showCategoryCatalog($categoryName){
@@ -17,9 +18,12 @@ class ShopController extends Controller {
             'subCategories' => $subCategories,
         ]);
     }
+
     public function showProductCatalog($category, $subCategory){
         return view('shop.shopListProducts', [
             'title' => $subCategory,
+            'subTitle' => $category,
+//            'products' => $products,
         ]);
     }
     public function showProduct($product){

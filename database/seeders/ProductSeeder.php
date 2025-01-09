@@ -11,7 +11,7 @@ class ProductSeeder extends Seeder {
     public function run(){
         \App\Models\Category::factory(12)->create();
         \App\Models\SubCategory::factory(6)->create();
-        \App\Models\Addresses::factory(6)->create();
+        \App\Models\Brand::factory(6)->create();
         \App\Models\Product::factory(50)->create();
     }
 }

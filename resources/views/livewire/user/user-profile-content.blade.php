@@ -129,30 +129,34 @@
 
                     @case('wishList')
                         <div class="space-y-4">
-                            @foreach($content['items'] as $item)
-                                <div  class="flex justify-between items-center p-4 border-b border-gray-300">
-                                    <div class="text-gray-800">
-                                        <a href="{{ route('shop.product', $item['name']) }}" class="text-blue-500 hover:underline">
-                                            {{ $item['name'] }}
-                                        </a>
-                                    </div>
-                                    <div class="flex gap-4">
-                                        <form method="POST" action="{{ route('cart.add', $item['id']) }}">
-                                            @csrf
+                            @if(count($content['items']) > 0)
+                                @foreach($content['items'] as $item)
+                                    <div class="flex justify-between items-center p-4 border-b border-gray-300">
+                                        <div class="text-gray-800 mx-4">
+                                            <a href="{{ route('shop.product', $item['name']) }}" class="text-blue-500 hover:underline">
+                                                {{ $item['name'] }}
+                                            </a>
+                                        </div>
+                                        <div class="flex gap-4">
+                                            <form method="POST" action="{{ route('cart.add', $item['id']) }}">
+                                                @csrf
+                                                <button
+                                                    wire:click="removeFromWishList('{{ $item['id'] }}')"
+                                                    type="submit" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
+                                                    Dodaj do koszyka
+                                                </button>
+                                            </form>
                                             <button
                                                 wire:click="removeFromWishList('{{ $item['id'] }}')"
-                                                type="submit" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
-                                                Dodaj do koszyka
+                                                class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+                                                Usuń z listy życzeń
                                             </button>
-                                        </form>
-                                        <button
-                                            wire:click="removeFromWishList('{{ $item['id'] }}')"
-                                            class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
-                                            Usuń z listy życzeń
-                                        </button>
+                                        </div>
                                     </div>
-                                </div>
-                            @endforeach
+                                @endforeach
+                            @else
+                                <p>Nie posiadasz zapisanego produktu</p>
+                            @endif
                         </div>
                     @break
                 @endswitch

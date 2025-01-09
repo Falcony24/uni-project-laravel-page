@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddressRequest;
 use App\Models\Addresses;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller{
-    public function addAddress(Request $request){
+    public function addAddress(AddressRequest $request){
         Addresses::create([
             'name' => $request['name'],
             'surname' => $request['surname'],

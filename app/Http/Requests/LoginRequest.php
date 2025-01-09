@@ -11,6 +11,14 @@ class LoginRequest extends FormRequest {
             'password' => 'required|string',
         ];
     }
+    public function messages(): array{
+        return [
+            'email.required' => 'Adres e-mail jest wymagany.',
+            'email.email' => 'Wprowadź prawidłowy adres e-mail.',
+            'password.required' => 'Hasło jest wymagane.',
+            'password.string' => 'Hasło musi być ciągiem tekstowym.',
+        ];
+    }
 
     public function authorize(): bool {
         return true;
